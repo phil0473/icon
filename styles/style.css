@@ -177,6 +177,12 @@ body::after {
     transform: scale(1.05) rotate(3deg);
 }
 
+.dj-jelly:active {
+    transform: scale(0.95) rotate(-5deg) !important; /* Squish down */
+    transition: transform 0.05s; /* Instant reaction */
+    filter: brightness(1.2); /* Flash slightly brighter */
+}
+
 .coral-layer {
     width: 25%;
     bottom: 0;
