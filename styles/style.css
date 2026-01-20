@@ -1,0 +1,395 @@
+/* --- 1. GLOBAL ATMOSPHERE (LIGHTER STUDIO) --- */
+body {
+    margin: 0;
+    padding: 0;
+    
+    /* NEW GRADIENT: "Twilight Mesh" */
+    /* Replaced pure blacks with Slate, Steel Blue, and Deep Periwinkle */
+    background: linear-gradient(-45deg, #2C5364, #203A43, #2C5364, #4ca1af);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite; /* Slightly faster flow */
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Helvetica Neue', sans-serif;
+}
+
+/* --- 2. THE UTILITY GRID (Softer) --- */
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    
+    /* Made the grid lines white (0.05 opacity) so they show up on the lighter BG */
+    background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+    
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* --- 3. THE VIGNETTE (Less Aggressive) --- */
+body::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Softened the corners from Pure Black (#000) to Dark Transparency */
+    background: radial-gradient(circle, transparent 50%, rgba(0,0,0,0.6) 100%);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* --- 4. ANIMATION --- */
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* --- 2. THE STAGE --- */
+.ocean-stage {
+    position: relative;
+    width: 85vmin; 
+    height: 85vmin;
+    max-width: 800px;
+    max-height: 800px;
+    border-radius: 50px;
+    overflow: hidden;
+    transition: transform 0.1s ease-out; /* Smooths the movement */
+    transform-style: preserve-3d; /* Tells browser to render 3D depth */
+
+
+    /* Water Gradient */
+    background: linear-gradient(180deg, #4facfe 0%, #00f2fe 60%, #30cfd0 100%);
+
+    /* Glossy Shadows */
+    box-shadow: 
+        inset 0 0 40px rgba(255,255,255,0.4),
+        0 30px 60px rgba(0,0,0,0.6),
+        0 0 0 8px rgba(255,255,255,0.1);
+}
+
+/* Sand Floor (Integrated Gradient) */
+.ocean-stage::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 35%;
+    background: linear-gradient(to bottom, 
+        rgba(240, 230, 140, 0) 0%,
+        rgba(240, 230, 140, 0.3) 30%,
+        #f6d365 100%
+    );
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Glass Reflection */
+.ocean-stage::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 45%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 100%);
+    border-radius: 50px 50px 100% 100% / 20%;
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* Add this to your existing .ocean-stage class */
+.ocean-stage::before {
+    /* Keep your existing sand gradient code here, but ADD this: */
+    
+    /* We are chaining two background images: Noise URL + Sand Gradient */
+    background: 
+        url("https://grainy-gradients.vercel.app/noise.svg"), /* Free noise texture */
+        linear-gradient(to bottom, 
+            rgba(240, 230, 140, 0) 0%,
+            rgba(240, 230, 140, 0.3) 30%,
+            #f6d365 100%
+        );
+    filter: contrast(120%) brightness(110%);
+}
+
+/* --- 3. THE ACTORS --- */
+.ocean-stage img {
+    position: absolute;
+    display: block;
+    filter: drop-shadow(0px 5px 15px rgba(0,0,50,0.2)); 
+}
+
+/* FISH LAYER */
+.fish-layer {
+    width: 35%; 
+    top: 20%;
+    
+    /* Start off-screen LEFT */
+    left: -40%; 
+    
+    z-index: 1;
+    opacity: 0.9;
+    filter: blur(0.5px);
+    
+    /* Animation settings */
+    animation: swimRight 14s linear infinite;
+}
+
+.happy-jelly {
+    width: 25%;
+    top: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    animation: float 4s ease-in-out infinite;
+}
+
+.dj-jelly {
+    width: 55%; 
+    bottom: 5%;
+    left: 5%;
+    z-index: 5;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.dj-jelly:hover {
+    transform: scale(1.05) rotate(3deg);
+}
+
+.coral-layer {
+    width: 25%;
+    bottom: 0;
+    right: 0;
+    z-index: 4;
+    pointer-events: none;
+    mix-blend-mode: multiply;
+    opacity: 0.8;
+}
+
+/* --- 4. ANIMATIONS --- */
+
+
+@keyframes swimRight {
+    0% { 
+        left: -40%; 
+       
+        transform: rotate(5deg); 
+    }
+    100% { 
+        left: 120%; 
+     
+        transform: rotate(-5deg); 
+    }
+}
+
+@keyframes float {
+    0%, 100% { transform: translate(-50%, 0px); }
+    50% { transform: translate(-50%, -20px); }
+}
+
+/* --- BUBBLE SYSTEM --- */
+
+/* 1. The Generic Bubble Style (Glassy Look) */
+.bubble {
+    position: absolute;
+    bottom: -50px; /* Start below the frame */
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.1));
+    border: 1px solid rgba(255, 255, 255, 0.5); /* Crisp white edge */
+    border-radius: 50%;
+    z-index: 3; /* In front of fish, behind DJ */
+    pointer-events: none;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2); /* Glow */
+    animation: rise 8s infinite ease-in;
+}
+
+/* 2. Individual Bubble Personalities (Randomness) */
+/* We change the size, speed, position, and delay for each one */
+
+.b1 { width: 2vmin; height: 2vmin; left: 10%; animation-duration: 6s; animation-delay: 0s; }
+.b2 { width: 4vmin; height: 4vmin; left: 25%; animation-duration: 8s; animation-delay: 1s; }
+.b3 { width: 1.5vmin; height: 1.5vmin; left: 40%; animation-duration: 5s; animation-delay: 3s; }
+.b4 { width: 3vmin; height: 3vmin; left: 60%; animation-duration: 10s; animation-delay: 0.5s; }
+.b5 { width: 5vmin; height: 5vmin; left: 75%; animation-duration: 7s; animation-delay: 2s; }
+.b6 { width: 2vmin; height: 2vmin; left: 85%; animation-duration: 6s; animation-delay: 4s; }
+.b7 { width: 3.5vmin; height: 3.5vmin; left: 15%; animation-duration: 9s; animation-delay: 5s; }
+.b8 { width: 1vmin; height: 1vmin; left: 50%; animation-duration: 11s; animation-delay: 1.5s; }
+
+/* 3. The Animation (Rise + Wobble) */
+@keyframes rise {
+    0% {
+        bottom: -50px;
+        transform: translateX(0);
+        opacity: 0;
+    }
+    20% {
+        opacity: 1; /* Fade in quickly */
+    }
+    50% {
+        transform: translateX(15px); /* Wobble right */
+    }
+    100% {
+        bottom: 120%; /* Float way above the top */
+        transform: translateX(-15px); /* Wobble left */
+        opacity: 0; /* Fade out at top */
+    }
+}
+
+/* --- GOD RAYS --- */
+.light-rays {
+    position: absolute;
+    top: -20%;
+    left: -20%;
+    width: 140%;
+    height: 100%;
+    /* Creates tilted beams of light */
+    background: repeating-linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0) 5%,
+        rgba(255, 255, 255, 0.05) 5%, /* Subtle beam */
+        rgba(255, 255, 255, 0.05) 7%,
+        rgba(255, 255, 255, 0) 7%,
+        rgba(255, 255, 255, 0) 12%
+    );
+    z-index: 2; /* In front of BG, behind fish */
+    pointer-events: none;
+    animation: shine 15s linear infinite;
+    mix-blend-mode: overlay;
+}
+
+@keyframes shine {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(50px); } /* Slow drift */
+}
+
+/* --- CAUSTICS (Floor Light) --- */
+.caustics {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    opacity: 0.3;
+    pointer-events: none;
+    /* This creates a web-like pattern */
+    background: 
+        radial-gradient(circle at 50% 50%, transparent 20%, rgba(255,255,255,0.2) 21%, transparent 22%),
+        radial-gradient(circle at 20% 20%, transparent 10%, rgba(255,255,255,0.2) 11%, transparent 12%);
+    background-size: 50px 50px, 80px 80px;
+    animation: causticWave 5s linear infinite;
+    mix-blend-mode: soft-light;
+}
+
+@keyframes causticWave {
+    0% { background-position: 0 0, 0 0; }
+    100% { background-position: 20px 20px, -10px 10px; }
+}
+
+/* THE CLICK BUBBLE */
+.click-bubble {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.1));
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: popUp 1s ease-out forwards;
+    z-index: 10;
+}
+
+@keyframes popUp {
+    0% { transform: scale(0); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: scale(2) translateY(-50px); opacity: 0; }
+}
+
+/* --- CINEMATIC BOOT SEQUENCE --- */
+
+/* 1. The Stage pops open */
+.ocean-stage {
+    /* Add this animation to your existing .ocean-stage block */
+    animation: bootUp 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    transform-origin: center;
+}
+
+/* 2. The DJ slides up */
+.dj-jelly {
+    /* Forces him to be invisible at start */
+    opacity: 0;
+    /* slides up after 0.5 seconds */
+    animation: slideUp 0.8s ease-out 0.5s forwards; 
+}
+
+/* 3. The Fish swim in late */
+.fish-layer {
+    opacity: 0;
+    animation: swimRight 14s linear infinite, fadeIn 1s ease-out 0.8s forwards;
+}
+
+/* 4. The UI/Bubbles fade in last */
+.bubble, .coral-layer {
+    opacity: 0;
+    animation: fadeIn 1.5s ease-out 1s forwards;
+    /* Note: Bubbles will also keep their 'rise' animation because of CSS cascading */
+}
+
+/* --- KEYFRAMES --- */
+
+@keyframes bootUp {
+    0% { transform: scale(0); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes slideUp {
+    0% { transform: translateY(100px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+/* --- THE SHEEN (Dynamic Reflection) --- */
+.glass-sheen {
+    position: absolute;
+    top: 0;
+    left: -150%; /* Start way off to the left */
+    width: 100%;
+    height: 100%;
+    
+    /* A sharp diagonal beam of light */
+    background: linear-gradient(
+        120deg, 
+        rgba(255,255,255,0) 30%, 
+        rgba(255,255,255,0.4) 50%, 
+        rgba(255,255,255,0) 70%
+    );
+    
+    z-index: 20; /* On top of everything */
+    pointer-events: none; /* Click through it */
+    animation: sheenSweep 6s ease-in-out infinite;
+}
+
+@keyframes sheenSweep {
+    0% { left: -150%; }
+    20% { left: 150%; } /* Swish across quickly */
+    100% { left: 150%; } /* Wait for the rest of the time */
+}
