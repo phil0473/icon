@@ -127,10 +127,16 @@ body::after {
 }
 
 /* --- 3. THE ACTORS --- */
+/* --- 3. THE ACTORS --- */
 .ocean-stage img {
     position: absolute;
     display: block;
-    filter: drop-shadow(0px 5px 15px rgba(0,0,50,0.2)); 
+    
+    /* LIGHTING FIX: */
+    /* Old: drop-shadow(0px 5px...) -> Straight down */
+    /* New: drop-shadow(15px 15px...) -> Bottom-Right Shadow */
+    /* This matches the light coming from Top-Left */
+    filter: drop-shadow(15px 15px 20px rgba(0,0,50,0.4)); 
 }
 
 /* FISH LAYER */
@@ -179,6 +185,7 @@ body::after {
     pointer-events: none;
     mix-blend-mode: multiply;
     opacity: 0.8;
+    filter: drop-shadow(20px 10px 10px rgba(0,0,50,0.6));
 }
 
 /* --- 4. ANIMATIONS --- */
@@ -270,6 +277,12 @@ body::after {
     pointer-events: none;
     animation: shine 15s linear infinite;
     mix-blend-mode: overlay;
+    background: repeating-linear-gradient(
+        -45deg, 
+        rgba(255, 255, 255, 0) 0%,
+        /* ... rest of your gradient ... */
+    );
+
 }
 
 @keyframes shine {
