@@ -343,11 +343,10 @@ body::after {
     animation: swimRight 14s linear infinite, fadeIn 1s ease-out 0.8s forwards;
 }
 
-/* 4. The UI/Bubbles fade in last */
-.bubble, .coral-layer {
+/* 4. The Coral fades in last (LEAVE BUBBLES OUT OF THIS) */
+.coral-layer {
     opacity: 0;
     animation: fadeIn 1.5s ease-out 1s forwards;
-    /* Note: Bubbles will also keep their 'rise' animation because of CSS cascading */
 }
 
 /* --- KEYFRAMES --- */
